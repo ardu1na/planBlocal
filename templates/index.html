@@ -1,0 +1,51 @@
+{% extends 'layout/base.html' %}
+
+{% load static %}
+
+{% block 'extrastyles' %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
+
+{% block 'content' %}
+<div class="container p-0 m-0">
+    <button id="sendButton">Start Sending</button>
+    <button id="stopButton" disabled>Stop Sending</button>
+</div>
+
+
+
+
+
+{% block 'extrascripts' %}
+{%comment%}
+<script>
+    console.log('Testing console...');
+
+    $(document).ready(function() {
+        setInterval(function() {
+            console.log('Sending AJAX request...');
+            $.ajax({
+                url: 'sendwsp/',  
+                type: 'POST',
+                success: function(data) {
+                    console.log('AJAX request successful.');
+                    if (data.success) {
+                        console.log('Mensaje enviado correctamente');
+                    } else {
+                        console.log('Error al enviar el mensaje:', data.error_message);
+                    }
+                },
+                error: function() {
+                    console.log('AJAX request encountered an error.');
+                    console.log('Error de conexión');
+                }
+            });
+        }, 5000); 
+    });
+</script>
+{% endcomment %}
+
+
+{% endblock %}
+
+{% endblock %}
