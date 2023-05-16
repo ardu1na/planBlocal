@@ -7,41 +7,33 @@
 {% endblock %}
 
 {% block 'content' %}
+    <div class="container">
+        <h1>TESTING</h1>
+    </div>
 
 
-
-
-
-{% block 'extrascripts' %}
-{%comment%}
-<script>
-    console.log('Testing console...');
-
-    $(document).ready(function() {
-        setInterval(function() {
-            console.log('Sending AJAX request...');
+    {% block 'extrascripts' %}
+    <!-- get real-time last alert -->
+    <script>
+        function updateUltima() {
+            // Send a WhatsApp message
             $.ajax({
-                url: 'sendwsp/',  
-                type: 'POST',
-                success: function(data) {
-                    console.log('AJAX request successful.');
-                    if (data.success) {
-                        console.log('Mensaje enviado correctamente');
-                    } else {
-                        console.log('Error al enviar el mensaje:', data.error_message);
-                    }
+                url: 'send/',
+                success: function(response) {
+                    console.log("Connection done");
                 },
-                error: function() {
-                    console.log('AJAX request encountered an error.');
-                    console.log('Error de conexión');
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ': ' + xhr.responseText);
                 }
             });
-        }, 5000); 
-    });
-</script>
-{% endcomment %}
+        }
 
+        $(document).ready(function() {
+            updateUltima();
+            setInterval(updateUltima, 10000);
+        });
+    </script>
+    {% endblock %}
 
-{% endblock %}
 
 {% endblock %}
