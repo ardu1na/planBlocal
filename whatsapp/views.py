@@ -2,6 +2,7 @@ import pywhatkit
 from django.http import HttpResponse
 from urllib.request import urlopen
 import json
+from datetime import datetime, date
 import time
 from whatsapp.models import LastAlert
 from django.shortcuts import render, redirect
@@ -23,20 +24,28 @@ def sendwhats(request):
     tipo = data ['tipo']
     lugar = data['vivienda']
     group = data ['wp']
-    datetime = data ['datetime']
-    
+    strdatetime = data ['datetime']
+    datetime_format = "%Y-%m-%d %H:%M:%S"
+    ddatetime = datetime.strptime(strdatetime, datetime_format)
+
     last = LastAlert.objects.first()
 
+
+
+    print (f'from api date= {strdatetime} \n from db date ={last.datetime}')
+    
+    
     if last is None:
         print("create first instance ")
-
-        new = LastAlert.objects.create(datetime=datetime)
+        first = LastAlert.objects.create(datetime=date.now())
         print("done")
-
-    elif last.datetime != datetime:
+        
+        
+        
+    elif last.datetime != ddatetime:
         print("new data, updating lastalert")
 
-        last.datetime=datetime
+        last.datetime=ddatetime
         last.save()
         print("done")
 

@@ -4,5 +4,5 @@ class LastAlert(models.Model):
     datetime = models.DateTimeField()
     
     def __str__ (self):
-        return self.datetime
+        return str(self.datetime)
     
