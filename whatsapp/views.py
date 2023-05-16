@@ -17,46 +17,63 @@ def sendwhats(request): # IN LINE 121     tab_close: bool = True, LIB/PYWHATKIT/
     url = "http://200.58.105.20/api/alarms/"
     
     
-    response = urlopen(url)
-    data = json.loads(response.read())
-    print(f'data from api: \n {data}')
-    
-    miembro = data['miembro']
-    tipo = data ['tipo']
-    lugar = data['vivienda']
-    group =  'LkNG4BNQsXK2Xfn99DwbFV' #data ['wp']
-    strdatetime = data ['datetime']
-    datetime_format = "%Y-%m-%d %H:%M:%S"
-    ddatetime = datetime.strptime(strdatetime, datetime_format)
-
-    last = LastAlert.objects.first()   
-    
-    if last is None:
-        print("create first instance ")
-        first = LastAlert.objects.create(datetime=date.now())
-        print("done")
-        return redirect('index')
-
+    try:
+        response = urlopen(url)
+        data = json.loads(response.read())
         
         
-    elif last.datetime != ddatetime:
-        print("new data, updating lastalert")
+        strdatetime = data ['datetime']
+        datetime_format = "%Y-%m-%d %H:%M:%S"
+        ddatetime = datetime.strptime(strdatetime, datetime_format)
 
-        last.datetime=ddatetime
-        last.save()
-        print("done")
+        last = LastAlert.objects.first()   
+        
+        if last is None:
+            print("create first instance ")
+            first = LastAlert.objects.create(datetime=date.now())
+            print("done")
+           
+            
+        elif last.datetime != ddatetime:
+
+            print("new data, updating lastalert")
+            print()
+            print(f'data from api: \n {data}')
+
+            last.datetime=ddatetime
+            last.save()
+            print("done") 
+            
+            
+            
+            
+            miembro = data['miembro']
+            tipo = data ['tipo']
+            lugar = data['vivienda']
+            group =  'LkNG4BNQsXK2Xfn99DwbFV' #data ['wp']
+            
+            message = f'ALERTA {tipo} de {miembro} \n {lugar}'
+            
+            pywhatkit.sendwhatmsg_to_group_instantly(group, message)
+            
+            print(f'message: {message} sent !!')
+            
+                   
+        else:        
+            print("no new alerts yet")
+        
+        
 
     
-    
-    else:
-    
-        print("no new alerts yet")
-    
-    message = f'ALERTA {tipo} de {miembro} \n {lugar}'
-    pywhatkit.sendwhatmsg_to_group_instantly(group, message)
-    return HttpResponse("going to wsp...")
+    except:
+        print(" . ")
+        print(" ..")
+        print("... something get wrong with api conection")
+        print("......................  . .lets try again ... ")
 
-     #redirect('index')
+    return redirect('index')
+        
+
 
 
     
