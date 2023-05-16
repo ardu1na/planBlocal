@@ -4,32 +4,51 @@ from urllib.request import urlopen
 import json
 import time
 from whatsapp.models import LastAlert
+from django.shortcuts import render, redirect
 
+def index  (request):
+    template = 'index.html'
+    context = {}
+    return render (request, template, context)
 
 def sendwhats(request):
     url = "http://200.58.105.20/api/alarms/"
     
-    try:
-        response = urlopen(url)
-        data = json.loads(response.read())
-        
-        miembro = data['miembro']
-        tipo = data ['tipo']
-        lugar = data['vivienda']
-        group = data ['wp']
-        datetime = data ['datetime']
-        
-        last_alert_datetime = LastAlert.get_last_alert()
-        if last_alert_datetime != datetime:
-            LastAlert.update_last_alert(datetime)
-            
+    
+    response = urlopen(url)
+    data = json.loads(response.read())
+    print(data)
+    
+    miembro = data['miembro']
+    tipo = data ['tipo']
+    lugar = data['vivienda']
+    group = data ['wp']
+    datetime = data ['datetime']
+    
+    last = LastAlert.objects.first()
+
+    if last is None:
+        print("create first instance ")
+
+        new = LastAlert.objects.create(datetime=datetime)
+        print("done")
+
+    elif last.datetime != datetime:
+        print("new data, updating lastalert")
+
+        last.datetime=datetime
+        last.save()
+        print("done")
+
         message = f'ALERTA {tipo} de {miembro} \n {lugar}'
-        pywhatkit.sendwhatmsg_to_group_instantly(group, message)
-        time.sleep(25)
-        return HttpResponse(status=204)
+        #pywhatkit.sendwhatmsg_to_group_instantly(group, message)
+        #time.sleep(25)
     
-    except:
-        print ("Something get wrong sending message or gettin data from API")
+    else:
+        print("no new alerts yet")
     
+    return redirect('index')
+
+
     
 

@@ -1,3 +1,4 @@
 from django.contrib import admin
+from whatsapp.models import LastAlert
 
-# Register your models here.
+admin.site.register(LastAlert)
