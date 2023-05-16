@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from urllib.request import urlopen
 import json
 import time
-from app.models import LastAlert
+from whatsapp.models import LastAlert
 
 
 def sendwhats(request):
