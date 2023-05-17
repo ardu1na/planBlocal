@@ -3,6 +3,7 @@
 
 {% block 'extrastyles' %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 {% endblock %}
 
 {% block 'pagetitle' %} Alerts {% endblock %}
@@ -19,35 +20,68 @@
 
         <div class="card p-4">
           <div class="card-body text-center">
-            <a class="btn btn-light shadow px-4 fs-3 my-5" href="#"> Iniciar sincronización </a>
+            <a class="btn btn-light shadow px-4 fs-3 my-5" href="#" id="start">  Iniciar sincronización </a>
           </div>
         </div>
 
       </div>
   {% endblock %}
 
+  {% block 'extrascripts' %}
+  <!-- get real-time last alert -->
+  <script>
+    let stopScript = false;
+let intervalId;
 
-    {% block 'extrascripts' %}
-    <!-- get real-time last alert 
-    <script>
-        function updateUltima() {
-            // Send a WhatsApp message
-            $.ajax({
-                url: 'send/',
-                success: function(response) {
-                    console.log("Connection done");
-                },
-                error: function(xhr, errmsg, err) {
-                    console.log(xhr.status + ': ' + xhr.responseText);
-                }
-            });
-        }
+function updateUltima() {
+  // Send a WhatsApp message
+  if (stopScript) {
+    return; // Stop the script if the flag is set
+  }
 
-        $(document).ready(function() {
-            updateUltima();
-            setInterval(updateUltima, 30000); // look for new alerts each 20 seconds
-        });
-    </script>-->
-    {% endblock %}
+  $.ajax({
+    url: 'send/',
+    success: function(response) {
+    },
+    error: function(xhr, errmsg, err) {
+      console.log(xhr.status + ': ' + xhr.responseText);
+    }
+  });
+}
+
+$(document).ready(function() {
+  $("#start").click(function(event) {
+    event.preventDefault();
+
+    if ($(this).hasClass('btn-light shadow')) {
+      $(this)
+        .removeClass('btn-light shadow')
+        .addClass('btn-outline-info btn-lg')
+        .text('Conectado...');
+
+      setTimeout(function() {
+        $("#start")
+          .removeClass('btn-outline-info')
+          .addClass('btn-outline-danger btn-lg px-5')
+          .text('Detener');
+      }, 3000);
+
+      updateUltima();
+      intervalId = setInterval(updateUltima, 30000);
+    } else if ($(this).hasClass('btn-outline-danger btn-lg px-5')) {
+      $(this)
+        .removeClass('btn-outline-danger btn-lg px-5')
+        .addClass('btn-light shadow')
+        .text('Iniciar sincronización');
+
+      stopScript = true; // Set the flag to stop the script
+      clearInterval(intervalId); // Clear the interval
+    }
+  });
+});
+
+  </script>
+  {% endblock %}
+    
 
 
