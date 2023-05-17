@@ -28,33 +28,28 @@
   {% endblock %}
 
   {% block 'extrascripts' %}
-  <!-- get real-time last alert -->
-  <script>
-    let stopScript = false;
-let intervalId;
+ <!-- get real-time last alert -->
+<script>
+  let stopScript = false;
+  let intervalId;
 
-function updateUltima() {
-  // Send a WhatsApp message
-  if (stopScript) {
-    return; // Stop the script if the flag is set
+  function updateUltima() {
+    if (stopScript) {
+      return; 
+    }
+
+    $.ajax({
+      url: 'send/',
+      success: function(response) {},
+      error: function(xhr, errmsg, err) {
+        console.log(xhr.status + ': ' + xhr.responseText);
+      }
+    });
   }
 
-  $.ajax({
-    url: 'send/',
-    success: function(response) {
-    },
-    error: function(xhr, errmsg, err) {
-      console.log(xhr.status + ': ' + xhr.responseText);
-    }
-  });
-}
-
-$(document).ready(function() {
-  $("#start").click(function(event) {
-    event.preventDefault();
-
-    if ($(this).hasClass('btn-light shadow')) {
-      $(this)
+  $(document).ready(function() {
+    function startUpdate() {
+      $("#start")
         .removeClass('btn-light shadow')
         .addClass('btn-outline-info btn-lg')
         .text('Conectado...');
@@ -67,20 +62,34 @@ $(document).ready(function() {
       }, 3000);
 
       updateUltima();
-      intervalId = setInterval(updateUltima, 30000);
-    } else if ($(this).hasClass('btn-outline-danger btn-lg px-5')) {
-      $(this)
+      intervalId = setInterval(updateUltima, 15000);
+    }
+
+    function stopUpdate() {
+      $("#start")
         .removeClass('btn-outline-danger btn-lg px-5')
         .addClass('btn-light shadow')
         .text('Iniciar sincronización');
 
-      stopScript = true; // Set the flag to stop the script
-      clearInterval(intervalId); // Clear the interval
+      stopScript = true; 
+      clearInterval(intervalId); 
     }
-  });
-});
 
-  </script>
+    $("#start").click(function(event) {
+      event.preventDefault();
+
+      if ($(this).hasClass('btn-light shadow')) {
+        startUpdate();
+      } else if (!$(this).hasClass('btn-light shadow')) {
+        stopUpdate();
+      }
+      
+      
+      
+    });
+  });
+</script>
+
   {% endblock %}
     
 
