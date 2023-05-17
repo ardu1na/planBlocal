@@ -1,0 +1,53 @@
+{% extends 'layout/base.html' %}
+
+
+{% block 'extrastyles' %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
+
+{% block 'pagetitle' %} Alerts {% endblock %}
+{% block 'breadcrumb' %}          
+<li class="breadcrumb-item">Components</li>
+<li class="breadcrumb-item active">Alerts</li>
+{% endblock %}
+
+
+{% block 'content' %}
+    
+
+      <div class="container p-5">
+
+        <div class="card p-4">
+          <div class="card-body text-center">
+            <a class="btn btn-light shadow px-4 fs-3 my-5" href="#"> Iniciar sincronización </a>
+          </div>
+        </div>
+
+      </div>
+  {% endblock %}
+
+
+    {% block 'extrascripts' %}
+    <!-- get real-time last alert 
+    <script>
+        function updateUltima() {
+            // Send a WhatsApp message
+            $.ajax({
+                url: 'send/',
+                success: function(response) {
+                    console.log("Connection done");
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ': ' + xhr.responseText);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            updateUltima();
+            setInterval(updateUltima, 30000); // look for new alerts each 20 seconds
+        });
+    </script>-->
+    {% endblock %}
+
+

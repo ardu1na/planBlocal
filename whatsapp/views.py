@@ -8,7 +8,7 @@ from whatsapp.models import LastAlert
 from django.shortcuts import render, redirect
 
 def index  (request):
-    template = 'index.html'
+    template = 'monitor.html'
     context = {}
     return render (request, template, context)
 
