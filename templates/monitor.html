@@ -9,9 +9,11 @@
 {% block 'pagetitle' %} Alerts {% endblock %}
 
 {% block 'content' %}
-<div class="d-flex flex-column-reverse fixed-bottom align-items-end ">
 
-  <div id="social" class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show   w-25"> 
+
+<div id="alerts" class="d-flex flex-column-reverse fixed-bottom align-items-end ">
+
+  <div id="alert1" class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show w-25"> 
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
     </button>
     <div class="media">
@@ -21,16 +23,6 @@
     </div>
   </div>
 
-  <div id="social" class="alert alert-warning bg-warning border-0 alert-dismissible fade show  w-25 "> 
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
-      </button>
-      <div class="media">
-              <span><i class="fas fa-fire"></i></span>
-              <h5 class="mt-1 mb-2 text-white">ALERTA fuego</h5>
-              <p class="mb-0"> en .sfajkdsajl a las 232.33 por Ujsfkda</p>
-      </div>
-  </div>
-  
 </div>
 
 
@@ -82,6 +74,7 @@
   <script>
     let stopScript = false;
     let intervalId;
+    var previousData = null;
 
     function updateUltima() {
       if (stopScript) {
@@ -90,7 +83,47 @@
 
       $.ajax({
         url: 'send/',
-        success: function(response) {},
+        success: function(data) {
+
+
+          if (previousData !== null && JSON.stringify(data) !== JSON.stringify(previousData)) {
+            // New data has been received, display an alert
+            var tipo = data.tipo;
+    
+                var icon = 'fas fa-star star-orange';
+                var color = 'alert-info';
+    
+                if (tipo === 'Emergencia') {
+                    color = 'facebook';
+                    icon = 'fa-hospital';
+    
+    
+                } else if (tipo === 'SOS') {
+                    color = 'google-plus';
+                    icon = 'fa-lock';
+    
+    
+                } else if (tipo === 'Fuego') {
+                    color = 'alert-warning solid';
+                    icon = 'fa-fire';
+                }
+    
+                $("#social").after('<div class="alert alert-social ' + color + ' alert-dismissible fade show">' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">' +
+                    '<span><i class="mdi mdi-btn-close"></i></span></button>' +
+                    '<div class="media">' +
+                    '<div class="alert-social-icon"><span><i class="fa ' + icon +'"></i></span></div>' +
+                    '<div class="media-body">' +
+                    '<h5 class="mt-1 mb-2 text-white">' + data.tipo + ' </h5>' +
+                    '<p class="mb-0"> En ' + data.alarma_vecinal + ' ' + data.datetime + '</p>' +
+                    '</div></div></div>');
+                    }
+              
+              
+                previousData = data;
+
+        },
+
         error: function(xhr, errmsg, err) {
           console.log(xhr.status + ': ' + xhr.responseText);
         }

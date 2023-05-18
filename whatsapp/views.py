@@ -1,13 +1,22 @@
 import pywhatkit
-from django.http import HttpResponse
+from django.http import JsonResponse
 from urllib.request import urlopen
 import json
 from datetime import datetime, date
-import time
 from whatsapp.models import LastAlert
 from django.shortcuts import render, redirect
 
-def index  (request):
+
+
+
+## TODO
+# añadir instrucciones e introducción al bot
+# añadir autentificación a la API
+# alerta al final una que cambia y se cierra sola
+# añadir link al registro de mensajes y al sitio web oficial
+
+
+def index  (request): 
     template = 'monitor.html'
     context = {}
     return render (request, template, context)
@@ -71,7 +80,7 @@ def sendwhats(request): # IN LINE 121     tab_close: bool = True, LIB/PYWHATKIT/
         print("... something get wrong with api conection")
         print("......................  . .lets try again ... ")
 
-    return redirect('index')
+    return JsonResponse(data)
         
 
 
