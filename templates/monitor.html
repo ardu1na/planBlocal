@@ -7,90 +7,127 @@
 {% endblock %}
 
 {% block 'pagetitle' %} Alerts {% endblock %}
-{% block 'breadcrumb' %}          
-<li class="breadcrumb-item">Components</li>
-<li class="breadcrumb-item active">Alerts</li>
-{% endblock %}
-
 
 {% block 'content' %}
     
 
-      <div class="container p-5">
+    <div class="container p-5">
 
         <div class="card p-4">
-          <div class="card-body text-center">
-            <a class="btn btn-light shadow px-4 fs-3 my-5" href="#" id="start">  Iniciar sincronización </a>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8 pt-5">
+                        <h2> BOT <i class="bi bi-whatsapp text-success fs-2 ms-3"></i></h2>
+                        <br>
+                        <p id="texto">Presiona el botón para activar las notificaciones por WhatsApp</p>
+                    
+                        <a class="btn btn-light shadow px-5 ms-5 fs-3 my-5 " href="#" id="start">  Iniciar sincronización </a>
+
+
+                    </div>
+                    <div class="col-4 d-flex align-items-center">
+                        <div class="text-center">
+                            <div id="spin" class="" role="status">
+                            </div>
+                          </div>
+                    </div>
+                </div>
+
           </div>
         </div>
 
-      </div>
-  {% endblock %}
+    </div>
 
-  {% block 'extrascripts' %}
- <!-- get real-time last alert -->
-<script>
-  let stopScript = false;
-  let intervalId;
 
-  function updateUltima() {
-    if (stopScript) {
-      return; 
+
+{% endblock %}
+
+
+
+
+
+
+{% block 'extrascripts' %}
+  <!-- get real-time last alert and send wsp message -->
+  <script>
+    let stopScript = false;
+    let intervalId;
+
+    function updateUltima() {
+      if (stopScript) {
+        return; 
+      }
+
+      $.ajax({
+        url: 'send/',
+        success: function(response) {},
+        error: function(xhr, errmsg, err) {
+          console.log(xhr.status + ': ' + xhr.responseText);
+        }
+      });
     }
 
-    $.ajax({
-      url: 'send/',
-      success: function(response) {},
-      error: function(xhr, errmsg, err) {
-        console.log(xhr.status + ': ' + xhr.responseText);
-      }
-    });
-  }
-
-  $(document).ready(function() {
-    function startUpdate() {
-      $("#start")
-        .removeClass('btn-light shadow')
-        .addClass('btn-outline-info btn-lg')
-        .text('Conectado...');
-
-      setTimeout(function() {
+    $(document).ready(function() {
+      
+      function startUpdate() {
         $("#start")
-          .removeClass('btn-outline-info')
-          .addClass('btn-outline-danger btn-lg px-5')
-          .text('Detener');
-      }, 3000);
+          .removeClass('btn-light shadow')
+          .addClass('btn-outline-info btn-lg')
+          .text('Conectado...');
+        $("#spin")
+        .addClass('spinner-border text-info');
 
-      updateUltima();
-      intervalId = setInterval(updateUltima, 15000);
-    }
+        setTimeout(function() {
 
-    function stopUpdate() {
-      $("#start")
-        .removeClass('btn-outline-danger btn-lg px-5')
-        .addClass('btn-light shadow')
-        .text('Iniciar sincronización');
+          $("#start")
+            .removeClass('btn-outline-info')
+            .addClass('btn-outline-danger')
+            .text('Detener');
 
-      stopScript = true; 
-      clearInterval(intervalId); 
-    }
+          $("#spin")
+              .removeClass('spinner-border text-info')
+              .addClass('spinner-grow');
 
-    $("#start").click(function(event) {
-      event.preventDefault();
+          $("#texto")
+              .text('Conexión activada');
+          
+        }, 3000);
 
-      if ($(this).hasClass('btn-light shadow')) {
-        startUpdate();
-      } else if (!$(this).hasClass('btn-light shadow')) {
-        stopUpdate();
+
+        updateUltima();
+        intervalId = setInterval(updateUltima, 15000);
       }
-      
-      
-      
-    });
-  });
-</script>
 
-  {% endblock %}
+
+      function stopUpdate() {
+        $("#start")
+          .removeClass('btn-outline-danger btn-lg')
+          .addClass('btn-light shadow')
+          .text('Iniciar sincronización');
+        $("#spin")
+          .removeClass('spinner-grow');
+        $("#texto")
+          .text('Presiona el botón para activar las notificaciones por WhatsApp');
+
+        stopScript = true; 
+        clearInterval(intervalId); 
+      }
+
+      
+
+      $("#start").click(function(event) {
+        event.preventDefault();
+
+        if ($(this).hasClass('btn-light shadow')) {
+          startUpdate();
+        } else if (!$(this).hasClass('btn-light shadow')) {
+          stopUpdate();      }      
+               
+      });
+    });
+  </script>
+
+{% endblock %}
     
 
 
