@@ -9,7 +9,21 @@
 {% block 'pagetitle' %} Alerts {% endblock %}
 
 {% block 'content' %}
-    
+
+
+{% comment %}
+alert-primary bg-primary text-light || b + btn-close-white
+alert-danger bg-danger text-light || b + btn-close-white
+alert-warning bg-warning 
+{% endcomment %}
+
+
+<div class="alert border-0 alert-dismissible fade show" role="alert" style="display: none;" id="alerta">
+    texto
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="boton"></button>
+</div>
+
+
 
     <div class="container p-5">
 
@@ -73,7 +87,7 @@
         $("#start")
           .removeClass('btn-light shadow')
           .addClass('btn-outline-info btn-lg')
-          .text('Conectado...');
+          .text('Conectado...')
         $("#spin")
         .addClass('spinner-border text-info');
 
@@ -83,14 +97,11 @@
             .removeClass('btn-outline-info')
             .addClass('btn-outline-danger')
             .text('Detener');
-
           $("#spin")
               .removeClass('spinner-border text-info')
               .addClass('spinner-grow');
-
           $("#texto")
-              .text('Conexión activada');
-          
+              .text('Conexión activada');        
         }, 3000);
 
 
@@ -120,7 +131,7 @@
 
         if ($(this).hasClass('btn-light shadow')) {
           startUpdate();
-        } else if (!$(this).hasClass('btn-light shadow')) {
+        } else if (!$(this).hasClass('btn-danger')) {
           stopUpdate();      }      
                
       });
