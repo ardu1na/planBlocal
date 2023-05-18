@@ -9,25 +9,40 @@
 {% block 'pagetitle' %} Alerts {% endblock %}
 
 {% block 'content' %}
+<div class="d-flex flex-column-reverse fixed-bottom align-items-end ">
 
+  <div id="social" class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show   w-25"> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
+    </button>
+    <div class="media">
+            <span><i class="fas fa-lock"></i></span>
+            <h5 class="mt-1 mb-2 text-white">ALERTA SOS</h5>
+            <p class="mb-0"> en .sfajkdsajl a las 232.33 por Ujsfkda</p>
+    </div>
+  </div>
 
-{% comment %}
-alert-primary bg-primary text-light || b + btn-close-white
-alert-danger bg-danger text-light || b + btn-close-white
-alert-warning bg-warning 
-{% endcomment %}
-
-
-<div class="alert border-0 alert-dismissible fade show" role="alert" style="display: none;" id="alerta">
-    texto
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="boton"></button>
+  <div id="social" class="alert alert-warning bg-warning border-0 alert-dismissible fade show  w-25 "> 
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
+      </button>
+      <div class="media">
+              <span><i class="fas fa-fire"></i></span>
+              <h5 class="mt-1 mb-2 text-white">ALERTA fuego</h5>
+              <p class="mb-0"> en .sfajkdsajl a las 232.33 por Ujsfkda</p>
+      </div>
+  </div>
+  
 </div>
 
 
 
-    <div class="container p-5">
+
+
+
+    <div class="container p-5 my-4">
+
 
         <div class="card p-4">
+          
             <div class="card-body">
                 <div class="row">
                     <div class="col-8 pt-5">
@@ -50,8 +65,9 @@ alert-warning bg-warning
           </div>
         </div>
 
+       
     </div>
-
+    
 
 
 {% endblock %}
