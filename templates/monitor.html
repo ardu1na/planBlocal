@@ -96,24 +96,24 @@
     
                 if (tipo === 'Emergencia') {
                     color = 'alert-primary bg-primary';
-                    icon = 'fas fa-hospital';
+                    icon = 'bi bi-hospital-fill';
     
     
                 } else if (tipo === 'SOS') {
                     color = 'alert-danger bg-danger text-light';
-                    icon = 'fas fa-lock';
+                    icon = 'bi bi-lock-fill';
     
     
                 } else if (tipo === 'Fuego') {
                     color = 'alert-warning bg-warning';
-                    icon = 'fas fa-fire';
+                    icon = 'bi bi-fire';
                 }
     
                 
                 $("#social").after(
                   '<div class="alert ' + color + ' border-0 alert-dismissible fade show w-25">' +
-                    ' <i class="' + icon + '"></i>' +
-                    ' <h5 class="mt-1 mb-2 text-white">' + data.tipo + ' </h5>' +
+                    ' ' +
+                    ' <h5 class="mt-1 mb-2 text-white"> <i class="fs-3 text-white pe-2 ' + icon + '"></i> ' + data.tipo + ' </h5>' +
                     ' <p class="mb-0"> En ' + data.alarma_vecinal + ' ' + data.datetime + '</p>' +
                     ' <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>' +
                   ' </div>');
