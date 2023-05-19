@@ -1,0 +1,38 @@
+
+{% extends 'layout/base.html' %}
+
+{% block 'pagetitle' %} Logs {% endblock %}
+
+{% block 'content' %}
+
+
+<div class="container p-5 my-4">
+  
+    <div class="card p-4">
+    
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8 pt-5">
+                    <h2> Mensajes enviados <i class="bi bi-whatsapp text-success fs-2 ms-3"></i></h2>
+                    <br>
+                    {% for entry in log_entries %}
+                    <div>
+                        <p>Fecha: {{ entry.date }}</p>
+                        <p>Hora: {{ entry.time }}</p>
+                        <p>Group ID: {{ entry.group_id }}</p>
+                        <p>Mensaje: {{ entry.message }}</p>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                    <a class="btn btn-light shadow ms-5 fs-3 my-5 " href="{% url 'index' %}" id="start">  Volver </a>
+                </div>
+            </div>
+      </div>
+    </div>       
+</div>   
+{% endblock %}
+
+
+    
+
+

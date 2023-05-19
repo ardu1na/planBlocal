@@ -1,3 +1,4 @@
+
 {% extends 'layout/base.html' %}
 
 
@@ -13,20 +14,24 @@
 
 <div id="alerts" class="d-flex flex-column-reverse fixed-bottom align-items-end ">
 
-  <div id="alert" class=" border-0 alert-dismissible fade  w-25"> 
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
-    </button>
-    <div class="media">
-            <span><i class="fas fa-lock"></i></span>
-            <h5 class="mt-1 mb-2 text-white"></h5>
-            <p class="mb-0"> </p>
-    </div>
+  <div id="alert">
   </div>
+
+  {% if messages %}
+    {% for m in messages %}
+      <div class="alert border-dark alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-1"></i>
+          {{m}} 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
 
 </div>
 
 
 <div class="container p-5 my-4">
+  
     <div class="card p-4">
     
         <div class="card-body">
@@ -36,6 +41,9 @@
                     <br>
                     <p id="texto">Presiona el botón para activar las notificaciones por WhatsApp</p>
                     <a class="btn btn-light shadow px-5 ms-5 fs-3 my-5 " href="#" id="start">  Iniciar sincronización </a>
+                    <br>
+                    <br>
+                    <a href="{% url 'logs' %}" class="btn"> Ver historial </a>
                 </div>
                 <div class="col-4 d-flex align-items-center">
                     <div class="text-center">
@@ -72,7 +80,7 @@
             var color = 'alert-info';
 
             if (tipo === 'Emergencia') {
-                color = 'alert-primary bg-primary';
+                color = 'alert-primary bg-primary text-light';
                 icon = 'bi bi-hospital-fill';
 
               } else if (tipo === 'SOS') {
@@ -84,11 +92,13 @@
                   icon = 'bi bi-fire';
               }  
                 
+
+
               $("#alert").after(
-                  '<div class="alert ' + color + ' border-0 alert-dismissible fade show w-25">' +
+                  '<div class="alert ' + color + ' border-0 alert-dismissible fade show w-25" role="alert">' +
                     ' ' +
                     ' <h5 class="mt-1 mb-2 text-white"> <i class="fs-3 text-white pe-2 ' + icon + '"></i> ' + data.tipo + ' </h5>' +
-                    ' <p class="mb-0"> En ' + data.alarma_vecinal + ' ' + data.datetime + '</p>' +
+                    ' <p class="mb-0"> En ' + data.vivienda + ' ' + data.datetime + '</p>' +
                     ' <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>' +
                   ' </div>');
                 }             

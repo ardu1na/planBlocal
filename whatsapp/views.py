@@ -4,16 +4,13 @@ from urllib.request import urlopen
 import json
 from datetime import datetime, date
 from whatsapp.models import LastAlert
-from django.shortcuts import render
-
-
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 ## TODO
 # añadir instrucciones e introducción al bot
-# añadir autentificación a la API
-# alerta al final una que cambia y se cierra sola
-# añadir link al registro de mensajes y al sitio web oficial
+# key API
+# añadir link al registro de mensajes y a la webapp en prod
 
 
 def index  (request): 
@@ -21,7 +18,7 @@ def index  (request):
     context = {}
     return render (request, template, context)
 
-def sendwhats(request): # IN LINE 121     tab_close: bool = True, LIB/PYWHATKIT/WHATS.PY  SET CLOSE_TAB = TRUE
+def sendwhats(request):
 
     url = "http://200.58.105.20/api/alarms/"
     
@@ -51,39 +48,63 @@ def sendwhats(request): # IN LINE 121     tab_close: bool = True, LIB/PYWHATKIT/
 
             last.datetime=ddatetime
             last.save()
-            print("done") 
+            print("done")           
             
-            
-            
-            
+           
             miembro = data['miembro']
             tipo = data ['tipo']
             lugar = data['vivienda']
-            group =  'LkNG4BNQsXK2Xfn99DwbFV' #data ['wp']
+            group = 'dfasjkldhal' # data ['wp']
             
             message = f'ALERTA {tipo} de {miembro} \n {lugar}'
-            
-            pywhatkit.sendwhatmsg_to_group_instantly(group, message)
-            
-            print(f'message: {message} sent !!')
-            
-                   
+            try:
+                pywhatkit.sendwhatmsg_to_group_instantly(group, message)
+                print(f'message: {message} sent !!')
+
+            except:
+                error_message = f'No se ha podido enviar el mensaje. \n {message}\n Por favor verifica el id del grupo de WhatsApp.'
+                messages.error(request, error_message)
+                return redirect('index')
+                               
         else:        
-            print("no new alerts yet")
+            print("no new alerts yet")   
         
-        
+        return JsonResponse(data)  
 
     
     except:
         print(" . ")
         print(" ..")
         print("... something get wrong with api conection")
-        print("......................  . .lets try again ... ")
-
-    return JsonResponse(data)
+        error_message = f'Ups! \n Algo salió mal estableciendo la conexión. \n Si el problema persiste, por favor contacta al administrador.'
+        messages.error(request, error_message)  
+        return redirect('index')
         
-### cambiar handle excepcions acá 
 
+        
 
     
 
+
+def logs  (request): 
+    
+    with open('PyWhatKit_DB.txt', 'r') as file:
+        log_entries = []
+        entry = {}
+        for line in file:
+            if line.strip() == '--------------------':
+                if entry:
+                    log_entries.append(entry)
+                    entry = {}
+            else:
+                key, value = line.strip().split(': ', 1)
+                entry[key.lower().replace(' ', '_')] = value
+        if entry:
+            log_entries.append(entry)
+
+
+    template = 'logs.html'
+    context = {
+        'log_entries' : log_entries,
+        }
+    return render (request, template, context)
