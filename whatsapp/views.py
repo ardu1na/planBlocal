@@ -6,6 +6,7 @@ from datetime import datetime, date
 from whatsapp.models import LastAlert
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 ## TODO
 # añadir instrucciones e introducción al bot
@@ -82,12 +83,7 @@ def sendwhats(request):
         
 
         
-
-    
-
-
-def logs  (request): 
-    
+def logs(request):
     with open('PyWhatKit_DB.txt', 'r') as file:
         log_entries = []
         entry = {}
@@ -102,12 +98,17 @@ def logs  (request):
         if entry:
             log_entries.append(entry)
 
+    paginator = Paginator(log_entries, 5)  
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     template = 'logs.html'
     context = {
-        'log_entries' : log_entries,
-        }
-    return render (request, template, context)
+        'page_obj': page_obj,
+    }
+    return render(request, template, context)
+
 
 
 
