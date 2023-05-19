@@ -2,10 +2,6 @@
 
 
 
-
-La versión local de un sistema de monitoreo de alarmas vecinales.
-< app on demand >
-
 #########################################################
 
 
