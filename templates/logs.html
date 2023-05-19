@@ -7,12 +7,17 @@
 
 
 <div class="container p-5 my-4">
-  
+    <div class="mb-3 d-flex flex-row-reverse">
+        <a class="btn btn-light shadow  " href="{% url 'log_download' %}" download> Descargar historial</a> 
+        <a class="btn btn-light shadow me-3" href="{% url 'index' %}" id="start">  Volver </a>
+
+    </div>
+
     <div class="card p-4">
-    
-        <div class="card-body">
+            <div class="card-body">
             <div class="row">
-                <div class="col-8 pt-5">
+                <div class="col-12 pt-5">               
+
                     <h2> Mensajes enviados <i class="bi bi-whatsapp text-success fs-2 ms-3"></i></h2>
                     <br>
                     {% for entry in log_entries %}
@@ -24,7 +29,7 @@
                     </div>
                     <hr>
                     {% endfor %}
-                    <a class="btn btn-light shadow ms-5 fs-3 my-5 " href="{% url 'index' %}" id="start">  Volver </a>
+                    
                 </div>
             </div>
       </div>

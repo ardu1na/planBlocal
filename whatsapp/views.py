@@ -1,5 +1,5 @@
 import pywhatkit
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from urllib.request import urlopen
 import json
 from datetime import datetime, date
@@ -108,3 +108,11 @@ def logs  (request):
         'log_entries' : log_entries,
         }
     return render (request, template, context)
+
+
+
+def log_download(request):
+    with open('PyWhatKit_DB.txt', 'r') as file:
+        response = HttpResponse(file, content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename="log.txt"'
+        return response
