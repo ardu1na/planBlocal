@@ -4,7 +4,7 @@ from urllib.request import urlopen
 import json
 from datetime import datetime, date
 from whatsapp.models import LastAlert
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 
 
@@ -82,7 +82,7 @@ def sendwhats(request): # IN LINE 121     tab_close: bool = True, LIB/PYWHATKIT/
 
     return JsonResponse(data)
         
-
+### cambiar handle excepcions acá 
 
 
     
