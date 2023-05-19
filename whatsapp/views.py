@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 ## TODO
 # añadir instrucciones e introducción al bot
 # key API
-# añadir link al registro de mensajes y a la webapp en prod
+# añadir link a la webapp en prod
 
 
 def index  (request): 
@@ -55,7 +55,7 @@ def sendwhats(request):
             miembro = data['miembro']
             tipo = data ['tipo']
             lugar = data['vivienda']
-            group = 'dfasjkldhal' # data ['wp']
+            group = data ['wp']
             
             message = f'ALERTA {tipo} de {miembro} \n {lugar}'
             try:
