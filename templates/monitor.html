@@ -13,7 +13,7 @@
 
 <div id="alerts" class="d-flex flex-column-reverse fixed-bottom align-items-end ">
 
-  <div id="social" class=" border-0 alert-dismissible fade  w-25"> 
+  <div id="alert" class=" border-0 alert-dismissible fade  w-25"> 
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
     </button>
     <div class="media">
@@ -26,47 +26,28 @@
 </div>
 
 
-
-
-
-
-    <div class="container p-5 my-4">
-
-
-        <div class="card p-4">
-          
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-8 pt-5">
-                        <h2> BOT <i class="bi bi-whatsapp text-success fs-2 ms-3"></i></h2>
-                        <br>
-                        <p id="texto">Presiona el botón para activar las notificaciones por WhatsApp</p>
-                    
-                        <a class="btn btn-light shadow px-5 ms-5 fs-3 my-5 " href="#" id="start">  Iniciar sincronización </a>
-
-
-                    </div>
-                    <div class="col-4 d-flex align-items-center">
-                        <div class="text-center">
-                            <div id="spin" class="" role="status">
-                            </div>
-                          </div>
-                    </div>
-                </div>
-
-          </div>
-        </div>
-
-       
-    </div>
+<div class="container p-5 my-4">
+    <div class="card p-4">
     
-
-
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8 pt-5">
+                    <h2> BOT <i class="bi bi-whatsapp text-success fs-2 ms-3"></i></h2>
+                    <br>
+                    <p id="texto">Presiona el botón para activar las notificaciones por WhatsApp</p>
+                    <a class="btn btn-light shadow px-5 ms-5 fs-3 my-5 " href="#" id="start">  Iniciar sincronización </a>
+                </div>
+                <div class="col-4 d-flex align-items-center">
+                    <div class="text-center">
+                        <div id="spin" class="" role="status">
+                        </div>
+                      </div>
+                </div>
+            </div>
+      </div>
+    </div>       
+</div>   
 {% endblock %}
-
-
-
-
 
 
 {% block 'extrascripts' %}
@@ -82,49 +63,37 @@
       }
 
       $.ajax({
-        url: 'send/',
+        url: 'send/', // consume api and send msgge if new data
         success: function(data) {
-
-
           if (previousData !== null && JSON.stringify(data) !== JSON.stringify(previousData)) {
-            // New data has been received, display an alert
+            // alert
             var tipo = data.tipo;
+            var icon = 'fas fa-star star-orange';
+            var color = 'alert-info';
 
-    
-                var icon = 'fas fa-star star-orange';
-                var color = 'alert-info';
-    
-                if (tipo === 'Emergencia') {
-                    color = 'alert-primary bg-primary';
-                    icon = 'bi bi-hospital-fill';
-    
-    
-                } else if (tipo === 'SOS') {
-                    color = 'alert-danger bg-danger text-light';
-                    icon = 'bi bi-lock-fill';
-    
-    
-                } else if (tipo === 'Fuego') {
-                    color = 'alert-warning bg-warning';
-                    icon = 'bi bi-fire';
-                }
-    
+            if (tipo === 'Emergencia') {
+                color = 'alert-primary bg-primary';
+                icon = 'bi bi-hospital-fill';
+
+              } else if (tipo === 'SOS') {
+                color = 'alert-danger bg-danger text-light';
+                  icon = 'bi bi-lock-fill';
+
+              } else if (tipo === 'Fuego') {
+                  color = 'alert-warning bg-warning';
+                  icon = 'bi bi-fire';
+              }  
                 
-                $("#social").after(
+              $("#alert").after(
                   '<div class="alert ' + color + ' border-0 alert-dismissible fade show w-25">' +
                     ' ' +
                     ' <h5 class="mt-1 mb-2 text-white"> <i class="fs-3 text-white pe-2 ' + icon + '"></i> ' + data.tipo + ' </h5>' +
                     ' <p class="mb-0"> En ' + data.alarma_vecinal + ' ' + data.datetime + '</p>' +
                     ' <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>' +
                   ' </div>');
-                  
-                  }
-                 
-              
+                }             
                 previousData = data;
-
         },
-
         error: function(xhr, errmsg, err) {
           console.log(xhr.status + ': ' + xhr.responseText);
         }
@@ -132,7 +101,9 @@
     }
 
     $(document).ready(function() {
-      
+
+
+      // encender con efectos
       function startUpdate() {
         $("#start")
           .removeClass('btn-light shadow')
@@ -142,7 +113,6 @@
         .addClass('spinner-border text-info');
 
         setTimeout(function() {
-
           $("#start")
             .removeClass('btn-outline-info')
             .addClass('btn-outline-danger')
@@ -153,13 +123,11 @@
           $("#texto")
               .text('Conexión activada');        
         }, 3000);
-
-
         updateUltima();
-        intervalId = setInterval(updateUltima, 15000);
+        intervalId = setInterval(updateUltima, 15000); // pregunta cada 15 seg
       }
 
-
+      // frenar
       function stopUpdate() {
         $("#start")
           .removeClass('btn-outline-danger btn-lg')
@@ -172,10 +140,9 @@
 
         stopScript = true; 
         clearInterval(intervalId); 
-      }
+      }      
 
-      
-
+      // button
       $("#start").click(function(event) {
         event.preventDefault();
 
