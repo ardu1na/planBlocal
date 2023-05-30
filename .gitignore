@@ -9,5 +9,6 @@ migrations/
 .env
 media/
 frontend/
+env/
 .vscode
 PyWhatKit_DB.txt
