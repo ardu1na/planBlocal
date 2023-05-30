@@ -1,11 +1,11 @@
 import pywhatkit
+import time
 from django.http import JsonResponse, HttpResponse
 from urllib.request import urlopen
 import json
 from datetime import datetime, date
 from whatsapp.models import LastAlert
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.core.paginator import Paginator
 
 ## TODO
@@ -27,17 +27,18 @@ def sendwhats(request):
     try:
         response = urlopen(url)
         data = json.loads(response.read())
-        
-        
+        print("API CONNECTED")
+        print(data)
         strdatetime = data ['datetime']
         datetime_format = "%Y-%m-%d %H:%M:%S"
         ddatetime = datetime.strptime(strdatetime, datetime_format)
-
+        print("comprobando base de datos...")
         last = LastAlert.objects.first()   
-        
+        print(last)
         if last is None:
             print("create first instance ")
-            first = LastAlert.objects.create(datetime=date.now())
+            first = LastAlert.objects.create(datetime=date.today())
+            print(first)
             print("done")
            
             
@@ -56,15 +57,16 @@ def sendwhats(request):
             tipo = data ['tipo']
             lugar = data['vivienda']
             group = data ['wp']
-            
+            print(f"group: {group}")
             message = f'ALERTA {tipo} de {miembro} \n {lugar}'
+            print("creando el mensaje")
             try:
+                
                 pywhatkit.sendwhatmsg_to_group_instantly(group, message)
                 print(f'message: {message} sent !!')
 
             except:
-                error_message = f'No se ha podido enviar el mensaje. \n {message}\n Por favor verifica el id del grupo de WhatsApp.'
-                messages.error(request, error_message)
+                print("algo salió mal, volviendo a empezar")
                 return redirect('index')
                                
         else:        
@@ -77,8 +79,6 @@ def sendwhats(request):
         print(" . ")
         print(" ..")
         print("... something get wrong with api conection")
-        error_message = f'Ups! \n Algo salió mal estableciendo la conexión. \n Si el problema persiste, por favor contacta al administrador.'
-        messages.error(request, error_message)  
         return redirect('index')
         
 
